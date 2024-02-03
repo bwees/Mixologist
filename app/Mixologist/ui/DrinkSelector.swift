@@ -14,7 +14,9 @@ struct DrinkSelector: View {
     var body: some View {
         TabView {
             ForEach(drinks) { drink in
-                DrinkCard(drink: drink)
+                if drink.isAvailable {
+                    DrinkCard(drink: drink)
+                }
             }
             .padding(.bottom, 16)
             .padding([.horizontal], 16)

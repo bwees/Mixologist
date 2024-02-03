@@ -10,77 +10,131 @@ import SwiftData
 
 struct Settings: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Drink]
+    @Query private var drinks: [Drink]
+    @Query private var ingredients: [Ingredient]
     
+    @State var slotConfig = [Ingredient?](repeating: nil, count: 8)
+        
     @Environment(\.dismiss) var dismiss
     
-    @State var ingredientNames = [String](repeating: "", count: 8)
 
     var body: some View {
         NavigationView {
-                List {
-                    Section(header: Text("Drinks")) {
-                        ForEach(items) { drink in
-                            NavigationLink {
-                                DrinkEdit(drink: drink)
-                            } label: {
-                                Text(drink.name)
+            List {
+                Section(header: Text("Slot Setup")) {
+                    ForEach(0..<8) { i in
+                        Picker("Slot " + String(i+1), selection: $slotConfig[i]) {
+                            Text("No Ingredient").tag(nil as Ingredient?)
+                            ForEach(ingredients, id: \.id) { ingr in
+                                if !slotConfig.contains(ingr) || slotConfig[i] == ingr {
+                                    Text(ingr.name).tag(ingr as Ingredient?)
+
+                                }
                             }
                         }
-                        .onDelete(perform: deleteItems)
+                        .pickerStyle(.menu)
                     }
-                    Section(header: Text("Ingredient Names")) {
-                        ForEach(0..<8) { slot_num in
-                            LabeledContent {
-                                TextField("Ingredient Name", text: $ingredientNames[slot_num])
-                                    .multilineTextAlignment(.trailing)
-                            } label: {
-                                Text("Tube " + String(slot_num+1))
+                    .onChange(of: slotConfig) {
+                        var slotIds = [String](repeating: "", count: 8)
+                        
+                        for (i, c) in slotConfig.enumerated() {
+                            if let ingredient = c {
+                                slotIds[i] = ingredient.id
                             }
                         }
-                        .onDelete(perform: deleteItems)
-                    }
-                    .onChange(of: ingredientNames) {
-                        UserDefaults.standard.set(ingredientNames, forKey: "ingredient_names")
+                        
+                        UserDefaults.standard.setValue(slotIds, forKey: "slotConfig")
                     }
                 }
-                .navigationTitle("Settings")
-                .toolbar {
-                    
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            addItem()
-                        }) {
-                            Image(systemName: "plus")
+                
+                Section(header: Text("Drinks")) {
+                    Button("Add Drink") {
+                        addDrink()
+                    }
+                    ForEach(drinks) { drink in
+                        NavigationLink {
+                            DrinkEdit(drink: drink)
+                        } label: {
+                            if !drink.recipe.keys.allSatisfy({ slotConfig.contains($0) }) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(drink.isAvailable ? .yellow : .gray)
+                            }
+                            Text(drink.name)
                         }
                     }
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Done") {
-                            dismiss()
+                    .onDelete(perform: deleteDrink)
+                }
+                Section(header: Text("Ingredients")) {
+                    Button("Add Ingredient") {
+                        addIngredient()
+                    }
+                    ForEach(ingredients) { ingredient in
+                        IngredientNameEdit(ingredient: ingredient)
+                    }
+                    .onDelete(perform: deleteIngredient)
+                }
+
+            }
+            .navigationTitle("Settings")
+            .onAppear {
+                let slotConfiguration: [String] = UserDefaults.standard.array(forKey: "slotConfig")! as! [String]
+                
+                for (i, slot) in slotConfiguration.enumerated() {
+                    if slot != "" {
+                        if let slotI = ingredients.first(where: {$0.id == slot}) {
+                            slotConfig[i] = slotI
                         }
                     }
                 }
-                .onAppear {
-                    if let savedNames = UserDefaults.standard.array(forKey: "ingredient_names") {
-                        ingredientNames = savedNames as! [String]
+            }
+            .toolbar {
+                ToolbarItem {
+                    Button("Done") {
+                        dismiss()
                     }
                 }
+            }
         }
     }
 
-    private func addItem() {
+    private func addDrink() {
         withAnimation {
-            let newItem = Drink(name: "new drink")
+            let newItem = Drink(name: "New Drink")
+            modelContext.insert(newItem)
+        }
+    }
+    
+    private func addIngredient() {
+        withAnimation {
+            let newItem = Ingredient(name: "New Ingredient")
             modelContext.insert(newItem)
         }
     }
 
-    private func deleteItems(offsets: IndexSet) {
+    private func deleteIngredient(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(items[index])
+                modelContext.delete(ingredients[index])
+                
+                for drink in drinks {
+                    drink.recipe.removeValue(forKey: ingredients[index])
+                }
+                
+                var slotConfiguration: [String] = UserDefaults.standard.array(forKey: "slotConfig")! as! [String]
+                
+                slotConfiguration.removeAll(where: {$0 == ingredients[index].id})
+                slotConfig.removeAll(where: {$0?.id == ingredients[index].id})
             }
         }
     }
+    
+    private func deleteDrink(offsets: IndexSet) {
+        withAnimation {
+            for index in offsets {
+                modelContext.delete(drinks[index])
+            }
+        }
+    }
+    
 }
 

@@ -15,7 +15,9 @@ struct MixologistApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Drink.self,
+            Ingredient.self
         ])
+        
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
@@ -28,7 +30,7 @@ struct MixologistApp: App {
     var body: some Scene {
         WindowGroup {
             Screens()
-                .modelContainer(for: Drink.self)
+                .modelContainer(sharedModelContainer)
         }
     }
 }

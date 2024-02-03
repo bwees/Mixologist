@@ -11,6 +11,7 @@ struct DrinkCard: View {
     var drink: Drink
     
     @State var isPouring = false
+    @State var isUnmappedAlertShowing = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -46,7 +47,15 @@ struct DrinkCard: View {
                         Spacer()
                         VStack {
                             Button(action: {
-                                isPouring = true
+                                
+                                let slotConfiguration: [String] = UserDefaults.standard.array(forKey: "slotConfig")! as! [String]
+                                let isMapped = drink.recipe.keys.allSatisfy({ slotConfiguration.contains($0.id) })
+                                
+                                if isMapped {
+                                    isPouring = true
+                                } else {
+                                    isUnmappedAlertShowing = true
+                                }
                             }) {
                                 Text("Pour")
                                     .font(.title2.bold())
@@ -54,6 +63,13 @@ struct DrinkCard: View {
                                     .padding(.vertical, 4)
                             }
                                 .buttonStyle(.borderedProminent)
+                        }
+                        .alert(isPresented: $isUnmappedAlertShowing) {
+                            Alert(
+                                title: Text("Unmapped Ingredients"),
+                                message: Text("Some of the ingredients for this drink are not assigned to slots. Go to settings and assign the necessary ingredients"),
+                                dismissButton: .default(Text("OK"))
+                            )
                         }
                         
                     }
@@ -68,8 +84,8 @@ struct DrinkCard: View {
             }
         }
         .sheet(isPresented: $isPouring) {
-            PourProgress(drinkID: drink.id)
-        }
+                PourProgress(drinkID: drink.id)
+            }
     }
 }
 

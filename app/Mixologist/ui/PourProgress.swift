@@ -16,6 +16,7 @@ struct PourProgress: View {
     @Environment(\.dismiss) var dismiss
     
     @Query var allDrinks: [Drink]
+    @Query var ingredients: [Ingredient]
     @State var drinkProgress = [Int32](repeating: 0, count: 8)
     @State var ingredientNames = [String](repeating: "", count: 8)
     @State var totalProgress: Float = 0
@@ -27,36 +28,41 @@ struct PourProgress: View {
     var body: some View {
         VStack {
             
-            if drink != nil {
+            if let drink = drink {
                 
-                Text("Preparing a " + drink!.name)
+                Text("Preparing a " + drink.name)
                     .font(.largeTitle.bold())
                     .padding(.top, 48)
                     .padding(.horizontal, 24)
                 
                 List {
-                    ForEach(0..<8) { i in
-                        if drink?.dispenseAmounts[i] != 0 {
-                            LabeledContent {
-                                if drinkProgress[i] == 0 {
-                                    Image(systemName: "checkmark")
-                                        .foregroundStyle(.green)
-                                } else {
-                                    ProgressView()
-                                        .progressViewStyle(.circular)
-                                }
-                            } label: {
-                                Text(ingredientNames[i] == "" 
-                                     ? "Tube " + String(i+1)
-                                     : ingredientNames[i]
-                                )
+                    ForEach((Array(drink.recipe.keys) as! [Ingredient]).sorted {
+                        $0.name < $1.name
+                    }) { ingredient in
+                        var slotIndex = ingredient.getSlotIndex()
+                        var slotConfiguration: [String?] = UserDefaults.standard.array(forKey: "slotConfig")! as! [String?]
+                        var slotIngredient = ingredients.first(where: {$0.id == slotConfiguration[slotIndex!]})
+                        
+                        LabeledContent {
+                            if drinkProgress[slotIndex!] == 0 {
+                                Image(systemName: "checkmark")
+                                    .foregroundStyle(.green)
+                            } else {
+                                ProgressView()
+                                    .progressViewStyle(.circular)
                             }
+                        } label: {
+                            Text(slotIngredient!.name == ""
+                                  ? "Ingredient"
+                                 : slotIngredient!.name
+                            )
                         }
+
                     }
                 }
                 
                 .onAppear {
-                    drink?.pour(with: btManager)
+                    drink.pour(with: btManager)
                 }
                 .onReceive(timer) { input in
                     drinkProgress = btManager.getProgress()
@@ -67,14 +73,11 @@ struct PourProgress: View {
                         dismiss()
                     }
                 }
+                .interactiveDismissDisabled()
             }
         }
             .onAppear {
                 drink = allDrinks.filter({$0.id == drinkID}).first
-                
-                if let savedNames = UserDefaults.standard.array(forKey: "ingredient_names") {
-                    ingredientNames = savedNames as! [String]
-                }
             }
         
     }

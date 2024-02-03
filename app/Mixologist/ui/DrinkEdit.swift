@@ -7,27 +7,62 @@
 
 import SwiftUI
 import PhotosUI
+import SwiftData
 
 struct DrinkEdit: View {
     var drink: Drink
     
     
-    @Environment(\.modelContext) private var modelContext
+    @Environment(\.modelContext) var modelContext
     @Environment(\.isPresented) var isPresented
     @EnvironmentObject var btManager: BluetoothManager
-    @State private var drinkImageItem: PhotosPickerItem?
+    @State var drinkImageItem: PhotosPickerItem?
     
-    @State private var drinkImageData: Data?
-    @State private var drinkName: String = ""
-    
-    @State var ingredientNames = [String](repeating: "", count: 8)
-    @State private var pourAmounts = [Int32](repeating: 0, count: 8)
-    
+    @State var drinkImageData: Data?
+    @State var drinkName: String = ""
+    @State var ingredientAmounts: [Ingredient: Int32] = [:]
+    @Query var ingredients: [Ingredient]
+    @State var canAddIngredients = true
+    @State var isMapped = true
+    @State var isAvailable = true
+        
     var body: some View {
         List {
+                
+            Toggle("Available", isOn: $isAvailable)
+            
+            Section(header: Text("Name")) {
+                TextField("Name", text: $drinkName)
+            }
+            
+            Section(header: Text("Ingredients"), footer: !isMapped ? Text("Some ingredients are not mapped to pumps. Go to the main settings screen and assign the necessary ingredients.") : nil ) {
+                Menu("Add Ingredient") {
+                    ForEach(ingredients) { ingredient in
+                        if !ingredientAmounts.contains(where: {$0.key == ingredient}) {
+                            Button(ingredient.name) {
+                                ingredientAmounts.updateValue(0, forKey: ingredient)
+                            }
+                        }
+                    }
+                }
+                .disabled(!canAddIngredients)
+                
+                ForEach((Array(ingredientAmounts.keys) as! [Ingredient]).sorted {
+                    $0.name < $1.name
+                }) { ingredient in
+                    LabeledContent {
+                        TextField("Amount", value: $ingredientAmounts[ingredient], format: .number)
+                            .multilineTextAlignment(.trailing)
+                    } label: {
+                        Text(ingredient.name == ""
+                             ? "Ingredient"
+                             : ingredient.name)
+                    }
+                }
+            }
+            
             Section(header: Text("Drink Image")) {
                 if drinkImageData != nil {
-                    
                     HStack {
                         Spacer()
                         Image(data: drinkImageData!)
@@ -36,7 +71,6 @@ struct DrinkEdit: View {
                             .frame(width: 200)
                             .clipShape(.rect(cornerRadius: 16))
                         Spacer()
-
                     }
                 }
                 
@@ -54,23 +88,6 @@ struct DrinkEdit: View {
                         }
                     }
             }
-                        
-            Section(header: Text("Name")) {
-                TextField("Name", text: $drinkName)
-            }
-            
-            Section(header: Text("Pour Amounts")) {
-                ForEach(0..<8) { i in
-                    LabeledContent {
-                        TextField("Amount", value: $pourAmounts[i], format: .number)
-                            .multilineTextAlignment(.trailing)
-                    } label: {
-                        Text(ingredientNames[i] == ""
-                             ? "Tube " + String(i+1)
-                             : ingredientNames[i])
-                    }
-                }
-            }
         }
             .interactiveDismissDisabled()
             .onAppear {
@@ -80,23 +97,31 @@ struct DrinkEdit: View {
                 
                 drinkName = drink.name
                 
-                for (i, _) in pourAmounts.enumerated() {
-                    pourAmounts[i] = drink.dispenseAmounts[i]
-                    print(drink.dispenseAmounts[i])
+                for (ingredient, amount) in drink.recipe {
+                    ingredientAmounts[ingredient] = amount
                 }
                 
-                if let savedNames = UserDefaults.standard.array(forKey: "ingredient_names") {
-                    ingredientNames = savedNames as! [String]
-                }
+                canAddIngredients = ingredientAmounts.count != ingredients.count
+                
+                let slotConfiguration: [String] = UserDefaults.standard.array(forKey: "slotConfig")! as! [String]
+                isMapped = drink.recipe.keys.allSatisfy({ slotConfiguration.contains($0.id) })
+                
+                isAvailable = drink.isAvailable
+
+            }
+            .onChange(of: ingredientAmounts) {
+                canAddIngredients = ingredientAmounts.count != ingredients.count
             }
             .onChange(of: isPresented) {
                 if !isPresented {
                     drink.name = drinkName
                     drink.image = drinkImageData
+                    drink.isAvailable = isAvailable
                     
-                    for (i, _) in pourAmounts.enumerated() {
-                        drink.dispenseAmounts[i] = pourAmounts[i]
+                    for (ingredient, amount) in ingredientAmounts {
+                        drink.recipe.updateValue(amount, forKey: ingredient)
                     }
+                    
                     try! modelContext.save()
                 }
             }

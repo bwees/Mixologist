@@ -38,23 +38,14 @@ struct Screens: View {
                 print(btManager.connectionState)
                 connectionSheetShown = btManager.connectionState != .connected
             })    
+            .environmentObject(btManager)
             .onAppear {
-                if let savedNames = UserDefaults.standard.array(forKey: "ingredient_names") {
-                    print("Loaded ingredient names!")
+                if UserDefaults.standard.array(forKey: "slotConfig") != nil {
+                    print("loaded slot configuration")
                 } else {
-                    UserDefaults.standard.set([
-                        "Ingredient 1",
-                        "Ingredient 2",
-                        "Ingredient 3",
-                        "Ingredient 4",
-                        "Ingredient 5",
-                        "Ingredient 6",
-                        "Ingredient 7",
-                        "Ingredient 8",
-                    ], forKey: "ingredient_names")
+                    UserDefaults.standard.setValue([String](repeating: "", count: 8), forKey: "slotConfig")
                 }
             }
-            .environmentObject(btManager)
     }
 }
 

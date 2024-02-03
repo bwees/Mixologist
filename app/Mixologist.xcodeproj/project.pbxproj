@@ -15,6 +15,7 @@
 		F05698452B69773A007859F1 /* Screens.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05698442B69773A007859F1 /* Screens.swift */; };
 		F05698472B697922007859F1 /* DrinkEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05698462B697922007859F1 /* DrinkEdit.swift */; };
 		F0A591142B6ED85800A61CC6 /* Ingredient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A591132B6ED85800A61CC6 /* Ingredient.swift */; };
+		F0A591162B6EE38800A61CC6 /* IngredientNameEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A591152B6EE38800A61CC6 /* IngredientNameEdit.swift */; };
 		F0CA20DE2B6DCB7200826AC1 /* BLEData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CA20DD2B6DCB7200826AC1 /* BLEData.swift */; };
 		F0CA20E12B6DCB7900826AC1 /* GATTDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CA20DF2B6DCB7900826AC1 /* GATTDefinitions.swift */; };
 		F0CA20E22B6DCB7900826AC1 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CA20E02B6DCB7900826AC1 /* BluetoothManager.swift */; };
@@ -37,6 +38,7 @@
 		F05698442B69773A007859F1 /* Screens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screens.swift; sourceTree = "<group>"; };
 		F05698462B697922007859F1 /* DrinkEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkEdit.swift; sourceTree = "<group>"; };
 		F0A591132B6ED85800A61CC6 /* Ingredient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ingredient.swift; sourceTree = "<group>"; };
+		F0A591152B6EE38800A61CC6 /* IngredientNameEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientNameEdit.swift; sourceTree = "<group>"; };
 		F0CA20DD2B6DCB7200826AC1 /* BLEData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEData.swift; sourceTree = "<group>"; };
 		F0CA20DF2B6DCB7900826AC1 /* GATTDefinitions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GATTDefinitions.swift; sourceTree = "<group>"; };
 		F0CA20E02B6DCB7900826AC1 /* BluetoothManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				F0DD922C2B6DF6F900B3E888 /* DrinkCard.swift */,
 				F0DD922E2B6DF76D00B3E888 /* PourProgress.swift */,
 				F0DD92302B6E04AD00B3E888 /* DrinkProgress.swift */,
+				F0A591152B6EE38800A61CC6 /* IngredientNameEdit.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -203,6 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0A591162B6EE38800A61CC6 /* IngredientNameEdit.swift in Sources */,
 				F0DD92312B6E04AD00B3E888 /* DrinkProgress.swift in Sources */,
 				F05698472B697922007859F1 /* DrinkEdit.swift in Sources */,
 				F05698352B69755C007859F1 /* Settings.swift in Sources */,

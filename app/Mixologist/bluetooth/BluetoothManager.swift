@@ -22,17 +22,16 @@ class BluetoothManager: NSObject, ObservableObject, Observable {
     @Published var connectionState: BTConnectionState = .disconnected
     @Published var shouldAutoconnect: Bool = true
     
-    @Published var drinkControl: [CBUUID: any GATTAttribute] = [
-        INGR_1_CTRL: IntAttribute(name: "Ingredient 1"),
-        INGR_2_CTRL: IntAttribute(name: "Ingredient 2"),
-        INGR_3_CTRL: IntAttribute(name: "Ingredient 3"),
-        INGR_4_CTRL: IntAttribute(name: "Ingredient 4"),
-        INGR_5_CTRL: IntAttribute(name: "Ingredient 5"),
-        INGR_6_CTRL: IntAttribute(name: "Ingredient 6"),
-        INGR_7_CTRL: IntAttribute(name: "Ingredient 7"),
-        INGR_8_CTRL: IntAttribute(name: "Ingredient 8")
+    @Published var slotControls: [CBUUID: any GATTAttribute] = [
+        SLOT_1_CTRL: IntAttribute(name: "Slot 1"),
+        SLOT_2_CTRL: IntAttribute(name: "Slot 2"),
+        SLOT_3_CTRL: IntAttribute(name: "Slot 3"),
+        SLOT_4_CTRL: IntAttribute(name: "Slot 4"),
+        SLOT_5_CTRL: IntAttribute(name: "Slot 5"),
+        SLOT_6_CTRL: IntAttribute(name: "Slot 6"),
+        SLOT_7_CTRL: IntAttribute(name: "Slot 7"),
+        SLOT_8_CTRL: IntAttribute(name: "Slot 8")
     ]
-    
 
     override init() {
         super.init()
@@ -114,28 +113,28 @@ extension BluetoothManager: CBCentralManagerDelegate, CBPeripheralDelegate {
                 service.peripheral?.readValue(for: char)
                 peripheral.setNotifyValue(true, for: char)
                 
-                if (drinkControl.keys.contains(char.uuid)) { // Settings
-                    drinkControl[char.uuid]?.charachteristic = char
+                if (slotControls.keys.contains(char.uuid)) { // Settings
+                    slotControls[char.uuid]?.charachteristic = char
                 }
             }
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        if (drinkControl.keys.contains(characteristic.uuid)) {
-            drinkControl[characteristic.uuid]?.setValue(data: characteristic.value!)
+        if (slotControls.keys.contains(characteristic.uuid)) {
+            slotControls[characteristic.uuid]?.setValue(data: characteristic.value!)
         }
     }
     
     func writeControls() {
-        for (_, setting) in drinkControl {
-            selectedDevice?.writeValue(setting.getData(), for: setting.charachteristic!, type: .withResponse)
+        for (_, control) in slotControls {
+            selectedDevice?.writeValue(control.getData(), for: control.charachteristic!, type: .withResponse)
         }
     }
     
     func writeControl(for uuid: CBUUID) {
-        let setting = drinkControl[uuid]!
-        selectedDevice?.writeValue(setting.getData(), for: setting.charachteristic!, type: .withResponse)
+        let control = slotControls[uuid]!
+        selectedDevice?.writeValue(control.getData(), for: control.charachteristic!, type: .withResponse)
     }
     
     func scanForDevices() {
@@ -150,8 +149,8 @@ extension BluetoothManager: CBCentralManagerDelegate, CBPeripheralDelegate {
         var progresses = [Int32](repeating: 0, count: 8)
         
         var i = 0
-        for char in drinkChars {
-            var intSetting = drinkControl[char] as! IntAttribute
+        for char in slotCharArray {
+            var intSetting = slotControls[char] as! IntAttribute
             
             progresses[i] = intSetting.value ?? 0
             i += 1
@@ -162,8 +161,8 @@ extension BluetoothManager: CBCentralManagerDelegate, CBPeripheralDelegate {
     
     
     func cancelPour() {
-        for controlChar in drinkChars {
-            let char = drinkControl[controlChar] as! IntAttribute
+        for controlChar in slotCharArray {
+            let char = slotControls[controlChar] as! IntAttribute
             char.value = 0
         }
         
