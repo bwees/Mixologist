@@ -8,19 +8,33 @@
 
 /* Begin PBXBuildFile section */
 		F05698332B69755C007859F1 /* MixologistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05698322B69755C007859F1 /* MixologistApp.swift */; };
-		F05698352B69755C007859F1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05698342B69755C007859F1 /* ContentView.swift */; };
-		F05698372B69755C007859F1 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05698362B69755C007859F1 /* Item.swift */; };
+		F05698352B69755C007859F1 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05698342B69755C007859F1 /* Settings.swift */; };
+		F05698372B69755C007859F1 /* Drink.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05698362B69755C007859F1 /* Drink.swift */; };
 		F05698392B69755D007859F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F05698382B69755D007859F1 /* Assets.xcassets */; };
 		F056983C2B69755D007859F1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F056983B2B69755D007859F1 /* Preview Assets.xcassets */; };
+		F05698432B6975D2007859F1 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05698422B6975D2007859F1 /* ContentView.swift */; };
+		F05698452B69773A007859F1 /* MainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05698442B69773A007859F1 /* MainScreen.swift */; };
+		F05698472B697922007859F1 /* DrinkEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05698462B697922007859F1 /* DrinkEdit.swift */; };
+		F0CA20DE2B6DCB7200826AC1 /* BLEData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CA20DD2B6DCB7200826AC1 /* BLEData.swift */; };
+		F0CA20E12B6DCB7900826AC1 /* GATTDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CA20DF2B6DCB7900826AC1 /* GATTDefinitions.swift */; };
+		F0CA20E22B6DCB7900826AC1 /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CA20E02B6DCB7900826AC1 /* BluetoothManager.swift */; };
+		F0CA20E42B6DCCFD00826AC1 /* ConnectBTModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CA20E32B6DCCFD00826AC1 /* ConnectBTModal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		F056982F2B69755C007859F1 /* Mixologist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mixologist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F05698322B69755C007859F1 /* MixologistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixologistApp.swift; sourceTree = "<group>"; };
-		F05698342B69755C007859F1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		F05698362B69755C007859F1 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		F05698342B69755C007859F1 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		F05698362B69755C007859F1 /* Drink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Drink.swift; sourceTree = "<group>"; };
 		F05698382B69755D007859F1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F056983B2B69755D007859F1 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		F05698422B6975D2007859F1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		F05698442B69773A007859F1 /* MainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreen.swift; sourceTree = "<group>"; };
+		F05698462B697922007859F1 /* DrinkEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkEdit.swift; sourceTree = "<group>"; };
+		F0CA20DD2B6DCB7200826AC1 /* BLEData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEData.swift; sourceTree = "<group>"; };
+		F0CA20DF2B6DCB7900826AC1 /* GATTDefinitions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GATTDefinitions.swift; sourceTree = "<group>"; };
+		F0CA20E02B6DCB7900826AC1 /* BluetoothManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
+		F0CA20E32B6DCCFD00826AC1 /* ConnectBTModal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectBTModal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,11 +67,15 @@
 		F05698312B69755C007859F1 /* Mixologist */ = {
 			isa = PBXGroup;
 			children = (
+				F0CA20DC2B6DCB4200826AC1 /* bluetooth */,
+				F05698462B697922007859F1 /* DrinkEdit.swift */,
 				F05698322B69755C007859F1 /* MixologistApp.swift */,
-				F05698342B69755C007859F1 /* ContentView.swift */,
-				F05698362B69755C007859F1 /* Item.swift */,
+				F05698342B69755C007859F1 /* Settings.swift */,
+				F05698422B6975D2007859F1 /* ContentView.swift */,
+				F05698362B69755C007859F1 /* Drink.swift */,
 				F05698382B69755D007859F1 /* Assets.xcassets */,
 				F056983A2B69755D007859F1 /* Preview Content */,
+				F05698442B69773A007859F1 /* MainScreen.swift */,
 			);
 			path = Mixologist;
 			sourceTree = "<group>";
@@ -68,6 +86,17 @@
 				F056983B2B69755D007859F1 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F0CA20DC2B6DCB4200826AC1 /* bluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				F0CA20E32B6DCCFD00826AC1 /* ConnectBTModal.swift */,
+				F0CA20E02B6DCB7900826AC1 /* BluetoothManager.swift */,
+				F0CA20DF2B6DCB7900826AC1 /* GATTDefinitions.swift */,
+				F0CA20DD2B6DCB7200826AC1 /* BLEData.swift */,
+			);
+			path = bluetooth;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,8 +169,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F05698352B69755C007859F1 /* ContentView.swift in Sources */,
-				F05698372B69755C007859F1 /* Item.swift in Sources */,
+				F05698472B697922007859F1 /* DrinkEdit.swift in Sources */,
+				F05698352B69755C007859F1 /* Settings.swift in Sources */,
+				F0CA20E42B6DCCFD00826AC1 /* ConnectBTModal.swift in Sources */,
+				F05698372B69755C007859F1 /* Drink.swift in Sources */,
+				F05698452B69773A007859F1 /* MainScreen.swift in Sources */,
+				F0CA20E12B6DCB7900826AC1 /* GATTDefinitions.swift in Sources */,
+				F05698432B6975D2007859F1 /* ContentView.swift in Sources */,
+				F0CA20DE2B6DCB7200826AC1 /* BLEData.swift in Sources */,
+				F0CA20E22B6DCB7900826AC1 /* BluetoothManager.swift in Sources */,
 				F05698332B69755C007859F1 /* MixologistApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
