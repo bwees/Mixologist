@@ -168,4 +168,13 @@ extension BluetoothManager: CBCentralManagerDelegate, CBPeripheralDelegate {
         
         writeControls()
     }
+    
+    func cleanMachine() {
+        for controlChar in slotCharArray {
+            let char = slotControls[controlChar] as! IntAttribute
+            char.value = 20000
+        }
+        
+        writeControls()
+    }
 }

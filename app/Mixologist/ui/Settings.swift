@@ -14,6 +14,7 @@ struct Settings: View {
     @Query private var ingredients: [Ingredient]
     
     @State var slotConfig = [Ingredient?](repeating: nil, count: 8)
+    @State var isCleaning = false
         
     @Environment(\.dismiss) var dismiss
     
@@ -21,6 +22,9 @@ struct Settings: View {
     var body: some View {
         NavigationView {
             List {
+                Button("Clean Mixologist") {
+                    isCleaning = true
+                }
                 Section(header: Text("Slot Setup")) {
                     ForEach(0..<8) { i in
                         Picker("Slot " + String(i+1), selection: $slotConfig[i]) {
@@ -86,6 +90,9 @@ struct Settings: View {
                         }
                     }
                 }
+            }
+            .sheet(isPresented: $isCleaning) {
+                CleaningScreen()
             }
             .toolbar {
                 ToolbarItem {

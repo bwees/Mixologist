@@ -84,8 +84,8 @@ struct DrinkCard: View {
             }
         }
         .sheet(isPresented: $isPouring) {
-                PourProgress(drinkID: drink.id)
-            }
+            PourProgress(drinkID: drink.id)
+        }
     }
 }
 
