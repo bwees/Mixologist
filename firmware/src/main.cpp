@@ -14,13 +14,14 @@ void handleIngredientPour(BLEDevice central, BLECharacteristic characteristic) {
         Serial.println(index);
 
         futures[index] = -1;
-
         digitalWrite(pins[index], LOW);
         return;
     }
 
     Serial.print("Start pouring ingredient: ");
     Serial.println(index);
+
+    Serial.println("Pin: " + String(pins[index]));
     digitalWrite(pins[index], HIGH);
 
     futures[index] = millis() + c.value();
@@ -30,6 +31,11 @@ void handleIngredientPour(BLEDevice central, BLECharacteristic characteristic) {
 void setup() {
     Serial.begin(9600);
     setup_ble(handleIngredientPour);
+
+    for (int i = 0; i < 8; i++) {
+        pinMode(pins[i], OUTPUT);
+        digitalWrite(pins[i], LOW);
+    }
 }
 
 void loop() {
