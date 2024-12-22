@@ -12,6 +12,8 @@ struct DrinkCard: View {
     
     @State var isPouring = false
     @State var isUnmappedAlertShowing = false
+    @State var connectionSheetShown = false
+    @EnvironmentObject var btManager: BluetoothManager
     
     var body: some View {
         GeometryReader { geometry in
@@ -52,7 +54,11 @@ struct DrinkCard: View {
                                 let isMapped = drink.recipe.keys.allSatisfy({ slotConfiguration.contains($0.id) })
                                 
                                 if isMapped {
-                                    isPouring = true
+                                    if (btManager.connectionState == .connected) {
+                                        isPouring = true
+                                    } else {
+                                        connectionSheetShown = true
+                                    }
                                 } else {
                                     isUnmappedAlertShowing = true
                                 }
@@ -85,6 +91,9 @@ struct DrinkCard: View {
         }
         .sheet(isPresented: $isPouring) {
             PourProgress(drinkID: drink.id)
+        }
+        .sheet(isPresented: $connectionSheetShown) {
+            ConnectBTView(btManager: btManager)
         }
     }
 }

@@ -10,7 +10,6 @@ import SwiftUI
 struct Screens: View {
     
     @ObservedObject private var btManager = BluetoothManager()
-    @State var connectionSheetShown: Bool = true
     @State var settingsShown = false
 
     var body: some View {
@@ -30,14 +29,6 @@ struct Screens: View {
             .sheet(isPresented: $settingsShown, content: {
                 Settings()
             })
-        
-            .sheet(isPresented: $connectionSheetShown) {
-                ConnectBTView(btManager: btManager)
-            }
-            .onChange(of: btManager.connectionState, {
-                print(btManager.connectionState)
-                connectionSheetShown = btManager.connectionState != .connected
-            })    
             .environmentObject(btManager)
             .onAppear {
                 if UserDefaults.standard.array(forKey: "slotConfig") != nil {
@@ -46,6 +37,7 @@ struct Screens: View {
                     UserDefaults.standard.setValue([String](repeating: "", count: 8), forKey: "slotConfig")
                 }
             }
+            .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

@@ -24,7 +24,7 @@
 		F0CA20E82B6DDAB400826AC1 /* DrinkSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0CA20E72B6DDAB400826AC1 /* DrinkSelector.swift */; };
 		F0DD922D2B6DF6F900B3E888 /* DrinkCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DD922C2B6DF6F900B3E888 /* DrinkCard.swift */; };
 		F0DD922F2B6DF76D00B3E888 /* PourProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DD922E2B6DF76D00B3E888 /* PourProgress.swift */; };
-		F0DD92312B6E04AD00B3E888 /* DrinkProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DD92302B6E04AD00B3E888 /* DrinkProgress.swift */; };
+		F0DD92312B6E04AD00B3E888 /* IngredientProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0DD92302B6E04AD00B3E888 /* IngredientProgress.swift */; };
 		F0F026232B6DE49400AEBF93 /* LabeledIntInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F026222B6DE49400AEBF93 /* LabeledIntInput.swift */; };
 		F0F026252B6DEB1700AEBF93 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F026242B6DEB1700AEBF93 /* Utils.swift */; };
 /* End PBXBuildFile section */
@@ -48,7 +48,7 @@
 		F0CA20E72B6DDAB400826AC1 /* DrinkSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkSelector.swift; sourceTree = "<group>"; };
 		F0DD922C2B6DF6F900B3E888 /* DrinkCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkCard.swift; sourceTree = "<group>"; };
 		F0DD922E2B6DF76D00B3E888 /* PourProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PourProgress.swift; sourceTree = "<group>"; };
-		F0DD92302B6E04AD00B3E888 /* DrinkProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkProgress.swift; sourceTree = "<group>"; };
+		F0DD92302B6E04AD00B3E888 /* IngredientProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientProgress.swift; sourceTree = "<group>"; };
 		F0F026222B6DE49400AEBF93 /* LabeledIntInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabeledIntInput.swift; sourceTree = "<group>"; };
 		F0F026242B6DEB1700AEBF93 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -64,6 +64,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F03C30B72B74022F00B54D3F /* components */ = {
+			isa = PBXGroup;
+			children = (
+				F0A591152B6EE38800A61CC6 /* IngredientNameEdit.swift */,
+				F0F026222B6DE49400AEBF93 /* LabeledIntInput.swift */,
+				F0F026242B6DEB1700AEBF93 /* Utils.swift */,
+				F0DD92302B6E04AD00B3E888 /* IngredientProgress.swift */,
+				F0DD922C2B6DF6F900B3E888 /* DrinkCard.swift */,
+			);
+			path = components;
+			sourceTree = "<group>";
+		};
 		F05698262B69755C007859F1 = {
 			isa = PBXGroup;
 			children = (
@@ -115,17 +127,13 @@
 		F0CA20E52B6DD8EC00826AC1 /* ui */ = {
 			isa = PBXGroup;
 			children = (
-				F0F026222B6DE49400AEBF93 /* LabeledIntInput.swift */,
+				F03C30B72B74022F00B54D3F /* components */,
 				F05698442B69773A007859F1 /* Screens.swift */,
 				F05698342B69755C007859F1 /* Settings.swift */,
 				F05698462B697922007859F1 /* DrinkEdit.swift */,
 				F0CA20E72B6DDAB400826AC1 /* DrinkSelector.swift */,
-				F0F026242B6DEB1700AEBF93 /* Utils.swift */,
-				F0DD922C2B6DF6F900B3E888 /* DrinkCard.swift */,
 				F0DD922E2B6DF76D00B3E888 /* PourProgress.swift */,
 				F0A591172B6F015A00A61CC6 /* CleaningScreen.swift */,
-				F0DD92302B6E04AD00B3E888 /* DrinkProgress.swift */,
-				F0A591152B6EE38800A61CC6 /* IngredientNameEdit.swift */,
 			);
 			path = ui;
 			sourceTree = "<group>";
@@ -210,7 +218,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0A591162B6EE38800A61CC6 /* IngredientNameEdit.swift in Sources */,
-				F0DD92312B6E04AD00B3E888 /* DrinkProgress.swift in Sources */,
+				F0DD92312B6E04AD00B3E888 /* IngredientProgress.swift in Sources */,
 				F05698472B697922007859F1 /* DrinkEdit.swift in Sources */,
 				F05698352B69755C007859F1 /* Settings.swift in Sources */,
 				F0A591182B6F015A00A61CC6 /* CleaningScreen.swift in Sources */,

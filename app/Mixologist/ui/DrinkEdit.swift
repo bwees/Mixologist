@@ -51,7 +51,12 @@ struct DrinkEdit: View {
                     $0.name < $1.name
                 }) { ingredient in
                     LabeledContent {
-                        TextField("Amount", value: $ingredientAmounts[ingredient], format: .number)
+                        TextField("Amount", value:
+                                  Binding(
+                                      get: { ingredientAmounts[ingredient] ?? 0},
+                                      set: { ingredientAmounts[ingredient] = ingredientAmounts[ingredient] == nil ? 0 : $0 }
+                                  ),
+                                  format: .number)
                             .multilineTextAlignment(.trailing)
                     } label: {
                         Text(ingredient.name == ""
@@ -59,6 +64,8 @@ struct DrinkEdit: View {
                              : ingredient.name)
                     }
                 }
+                .onDelete(perform: deleteIngredient)
+
             }
             
             Section(header: Text("Drink Image")) {
@@ -126,5 +133,16 @@ struct DrinkEdit: View {
                 }
             }
             .navigationTitle("Edit")
+    }
+    
+    private func deleteIngredient(offsets: IndexSet) {
+        withAnimation {
+            for index in offsets {
+                let ingredient: Ingredient = Array(ingredientAmounts.keys)[index]
+                ingredientAmounts.removeValue(forKey: ingredient)
+                
+                drink.recipe.removeValue(forKey: ingredient)
+            }
+        }
     }
 }

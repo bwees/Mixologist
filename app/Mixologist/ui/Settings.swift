@@ -8,6 +8,11 @@
 import SwiftUI
 import SwiftData
 
+enum FillUnits: Int {
+    case ounces = 0
+    case mililiters = 1
+}
+
 struct Settings: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var drinks: [Drink]
@@ -15,16 +20,32 @@ struct Settings: View {
     
     @State var slotConfig = [Ingredient?](repeating: nil, count: 8)
     @State var isCleaning = false
+    @State var connectionSheetShown = false
+    @State var units: FillUnits = .ounces
         
     @Environment(\.dismiss) var dismiss
-    
+    @EnvironmentObject var btManager: BluetoothManager
 
     var body: some View {
         NavigationView {
             List {
                 Button("Clean Mixologist") {
-                    isCleaning = true
+                    if (btManager.connectionState == .connected) {
+                        isCleaning = true
+                    } else {
+                        connectionSheetShown = true
+                    }
                 }
+                
+                Picker("Measurement Units", selection: $units) {
+                    Text("oz").tag(0)
+                    Text("mL").tag(1)
+                }
+                    .pickerStyle(.segmented)
+                    .onChange(of: units, {
+                        UserDefaults.standard.setValue(units.rawValue, forKey: "fillUnits")
+                    })
+                
                 Section(header: Text("Slot Setup")) {
                     ForEach(0..<8) { i in
                         Picker("Slot " + String(i+1), selection: $slotConfig[i]) {
@@ -90,9 +111,16 @@ struct Settings: View {
                         }
                     }
                 }
+                
+                let unitsConfig: Int = UserDefaults.standard.integer(forKey: "fillUnits")
+                units = FillUnits(rawValue: unitsConfig) ?? .ounces
+                
             }
             .sheet(isPresented: $isCleaning) {
                 CleaningScreen()
+            }
+            .sheet(isPresented: $connectionSheetShown) {
+                ConnectBTView(btManager: btManager)
             }
             .toolbar {
                 ToolbarItem {
@@ -121,16 +149,21 @@ struct Settings: View {
     private func deleteIngredient(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(ingredients[index])
+                var slotConfiguration: [String] = UserDefaults.standard.array(forKey: "slotConfig")! as! [String]
+                
+                slotConfiguration.removeAll(where: {$0 == ingredients[index].id})
+                for (i, slot) in slotConfig.enumerated() {
+                    if slot == ingredients[index] {
+                        slotConfig[i] = nil as Ingredient?
+                    }
+                }
                 
                 for drink in drinks {
                     drink.recipe.removeValue(forKey: ingredients[index])
                 }
                 
-                var slotConfiguration: [String] = UserDefaults.standard.array(forKey: "slotConfig")! as! [String]
+                modelContext.delete(ingredients[index])
                 
-                slotConfiguration.removeAll(where: {$0 == ingredients[index].id})
-                slotConfig.removeAll(where: {$0?.id == ingredients[index].id})
             }
         }
     }

@@ -8,6 +8,9 @@
 import Foundation
 import SwiftData
 
+let ML_TO_S = 620
+let DRINK_SCALE = 1
+
 @Model
 final class Drink: Identifiable {
     var name: String
@@ -31,7 +34,7 @@ final class Drink: Identifiable {
                 }
                 
                 let slotControl = btManager.slotControls[slotCharArray[slotIndex]] as! IntAttribute
-                slotControl.value = dispenseAmount
+                slotControl.value = dispenseAmount * Int32(ML_TO_S) * Int32(DRINK_SCALE)
             }
         }
         
